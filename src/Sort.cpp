@@ -13,6 +13,7 @@
 
 void Sort::RunTest() {
     auto data = Sort::GenerateRandomData<double>(4e5);
-    Sort::ImprovedQuickSort(data);
+    // Sort::ImprovedQuickSort(data);
+    Sort::BukkitSort(data);
     std::cout << "Sorted: " << Sort::CheckSorted(data) << std::endl;
 }

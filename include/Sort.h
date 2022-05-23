@@ -39,6 +39,15 @@ public:
     static void ImprovedQuickSort(std::vector<T> &data);
 
     /**
+     * @brief Bukkit Sort
+     *
+     * @tparam T
+     * @param data
+     */
+    template <typename T>
+    static void BukkitSort(std::vector<T> &data);
+
+    /**
      * @brief Random Data Generator
      *
      * @tparam T
@@ -85,12 +94,12 @@ std::vector<T> Sort::GenerateRandomData(size_t size) {
     data.reserve(size);
 
     // For Debug Device~
-    std::random_device rd;
-    std::mt19937 gen(rd());
+    // std::random_device rd;
+    // std::mt19937 gen(rd());
 
     // For Release Device~
-    // auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-    // std::mt19937 gen(seed);
+    auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+    std::mt19937 gen(seed);
 
     std::uniform_int_distribution<> dis(0, 100);
     for (size_t i = 0; i < size; ++i) {
@@ -203,6 +212,38 @@ bool Sort::CheckSorted(std::vector<T> &data) {
         }
     }
     return true;
+}
+
+template <typename T>
+void Sort::BukkitSort(std::vector<T> &data) {
+    // Step 1: Find the max and min value
+    T max = data[0];
+    T min = data[0];
+    for (size_t i = 1; i < data.size(); ++i) {
+        if (data[i] > max) {
+            max = data[i];
+        }
+        if (data[i] < min) {
+            min = data[i];
+        }
+    }
+
+    // Step 2: Create the bucket
+    std::vector<std::vector<T>> bucket(data.size());
+
+    // Step 3: Sort the data
+    for (size_t i = 0; i < data.size(); ++i) {
+        int idx = (data[i] - min) * (data.size() - 1) / (max - min);
+        bucket[idx].emplace_back(data[i]);
+    }
+
+    // Step 4: Merge the data
+    size_t idx = 0;
+    for (size_t i = 0; i < bucket.size(); ++i) {
+        for (size_t j = 0; j < bucket[i].size(); ++j) {
+            data[idx++] = bucket[i][j];
+        }
+    }
 }
 
 #endif  // INCLUDE_MY_SORT_H
