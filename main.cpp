@@ -1,6 +1,8 @@
 #include <iostream>
 
+#include "include/Sort.h"
+
 int main() {
-    std::cout << "Hello, World!" << std::endl;
+    Sort::RunTest();
     return 0;
 }
