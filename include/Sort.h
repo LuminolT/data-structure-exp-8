@@ -228,20 +228,19 @@ void Sort::BukkitSort(std::vector<T> &data) {
         }
     }
 
-    // Step 2: Create the bucket
-    std::vector<std::vector<T>> bucket(data.size());
+    // Step 2: Create the buckit
+    std::vector<T> number(max - min + 1);
 
     // Step 3: Sort the data
     for (size_t i = 0; i < data.size(); ++i) {
-        int idx = (data[i] - min) * (data.size() - 1) / (max - min);
-        bucket[idx].emplace_back(data[i]);
+        number[data[i] - min]++;
     }
 
     // Step 4: Merge the data
     size_t idx = 0;
-    for (size_t i = 0; i < bucket.size(); ++i) {
-        for (size_t j = 0; j < bucket[i].size(); ++j) {
-            data[idx++] = bucket[i][j];
+    for (size_t i = 0; i < number.size(); ++i) {
+        for (size_t j = 0; j < number[i]; ++j) {
+            data[idx++] = i + min;
         }
     }
 }
