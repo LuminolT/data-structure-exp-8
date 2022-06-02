@@ -13,6 +13,7 @@
 #define INCLUDE_SORT_H
 
 #include <chrono>
+#include <iomanip>
 #include <iostream>
 #include <random>
 #include <stack>
@@ -37,6 +38,15 @@ public:
      */
     template <typename T>
     static void ImprovedQuickSort(std::vector<T> &data);
+
+    /**
+     * @brief My Quick Sort
+     *
+     * @tparam T
+     * @param data
+     */
+    template <typename T>
+    static void MyQuickSort(std::vector<T> &data);
 
     /**
      * @brief Bukkit Sort
@@ -68,10 +78,16 @@ public:
     static bool CheckSorted(std::vector<T> &data);
 
     /**
-     * @brief Run Test
+     * @brief Run Test for second mission.
      *
      */
-    static void RunTest();
+    static void RunTest2();
+
+    /**
+     * @brief Run Test for third mission.
+     *
+     */
+    static void RunTest3();
 
 protected:
     /**
@@ -84,6 +100,17 @@ protected:
      */
     template <typename T>
     static void subQuickSort(std::vector<T> &data, int left, int right);
+
+    /**
+     * @brief sub My Quick Sort
+     *
+     * @tparam T
+     * @param data
+     * @param left
+     * @param right
+     */
+    template <typename T>
+    static void subMyQSort(std::vector<T> &data, int left, int right);
 };
 
 // Definitions
@@ -131,7 +158,6 @@ void Sort::subQuickSort(std::vector<T> &data, int left, int right) {
             --j;
         }
     }
-    std::cout << "test: " << i << " " << j << std::endl;
     subQuickSort(data, left, j);
     subQuickSort(data, i, right);
 }
@@ -243,6 +269,48 @@ void Sort::BukkitSort(std::vector<T> &data) {
             data[idx++] = i + min;
         }
     }
+}
+
+// subMyQuickSort
+template <typename T>
+void Sort::subMyQSort(std::vector<T> &data, int left, int right) {
+    if (left >= right)
+        return;
+    if (right - left <= 10) {
+        for (auto i = left; i <= right; i++) {
+            auto key = data[i];
+            auto j = i - 1;
+            while (j >= left && key < data[j]) {
+                data[j + 1] = data[j];
+                j--;
+            }
+            data[j + 1] = key;
+        }
+    } else {
+        std::swap(data[left], data[left + rand() % (right - left + 1)]);
+        auto key = data[left];
+        auto i = left, j = left;
+        auto k = right;
+        while (i <= k) {
+            if (data[i] < key) {
+                std::swap(data[i], data[j]);
+                i++, j++;
+            } else if (data[i] > key) {
+                std::swap(data[i], data[k]);
+                k--;
+            } else {
+                i++;
+            }
+        }
+        subMyQSort(data, left, j);
+        subMyQSort(data, k + 1, right);
+    }
+}
+
+// My Quick Sort
+template <typename T>
+void Sort::MyQuickSort(std::vector<T> &data) {
+    subMyQSort(data, 0, data.size() - 1);
 }
 
 #endif  // INCLUDE_MY_SORT_H
